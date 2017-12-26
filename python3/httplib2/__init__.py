@@ -997,9 +997,9 @@ class Http(object):
             except socket.timeout:
                 conn.close()
                 raise
-            except socket.gaierror:
+            except socket.gaierror as e:
                 conn.close()
-                raise ServerNotFoundError("Unable to find the server at %s" % conn.host)
+                raise ServerNotFoundError("Unable to find the server at %s" % conn.host) from e
             except socket.error as e:
                 errno_ = (e.args[0].errno if isinstance(e.args[0], socket.error) else e.errno)
                 if errno_ in (errno.ENETUNREACH, errno.EADDRNOTAVAIL) and i < RETRIES:
